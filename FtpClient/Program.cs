@@ -19,6 +19,8 @@ namespace FtpClient
             String key;
             prevAddress = currentAddress = ftpAddress;
             Client client;
+
+
             while (true)
             {
                 Console.Clear();
@@ -29,28 +31,16 @@ namespace FtpClient
                 Console.WriteLine(client.URI);
                 WorkFunction.WriteFiles(list);
 
-                program.menu();
+                program.printmenu();
                 key = Console.ReadLine();
 
                 if (key.Equals("change"))
                 {
-                    Console.WriteLine("\nEnter directory name:");
-                    String name = Console.ReadLine();
-                    if (name.Equals("..."))
-                    {
-                        currentAddress = prevAddress;
-                    }
-                    else
-                    {
-                        prevAddress = client.URI;
-                        currentAddress = client.URI + name + "/";
-                    }
+                    OnChange(client);
                 }
                 else if (key.Equals("download"))
                 {
-                    Console.WriteLine("\nEnter file name:");
-                    String name = Console.ReadLine();
-                    client.DownloadFile(name, directoryForDownload + name);
+                    OnDownload(client);
                 }
                 else if (key.Equals("exit"))
                 {
@@ -59,7 +49,29 @@ namespace FtpClient
             }
         }
 
-        public void menu()
+        private static void OnDownload(Client client)
+        {
+            Console.WriteLine("\nEnter file name:");
+            String name = Console.ReadLine();
+            client.DownloadFile(name, directoryForDownload + name);
+        }
+
+        private static void OnChange(Client client)
+        {
+            Console.WriteLine("\nEnter directory name:");
+            String name = Console.ReadLine();
+            if (name.Equals("..."))
+            {
+                currentAddress = prevAddress;
+            }
+            else
+            {
+                prevAddress = client.URI;
+                currentAddress = client.URI + name + "/";
+            }
+        }
+
+        public void printmenu()
         {
             Console.WriteLine("Enter 'change' to change directory");
             Console.WriteLine("Enter 'download' to download file");

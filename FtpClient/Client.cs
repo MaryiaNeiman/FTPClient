@@ -40,12 +40,11 @@ namespace FtpClient
             byte[] buffer = new byte[bufferSize];
             try
             {
-                using (var response = (FtpWebResponse)request.GetResponse())
-                {
-                    using (var stream = response.GetResponseStream())
-                    {
-                        using (var fs = new FileStream(dest, FileMode.OpenOrCreate))
-                        {
+                var response = (FtpWebResponse)request.GetResponse();
+
+                var stream = response.GetResponseStream();
+                var fs = new FileStream(dest, FileMode.OpenOrCreate);
+                       
                             int readCount = stream.Read(buffer, 0, bufferSize);
 
                             while (readCount > 0)
@@ -56,11 +55,11 @@ namespace FtpClient
                                 fs.Write(buffer, 0, readCount);
                                 readCount = stream.Read(buffer, 0, bufferSize);
                             }
-                        }
-                    }
+                     
+                    
 
                     return response.StatusDescription;
-                }
+                
 
             }
 
